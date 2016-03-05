@@ -65,7 +65,7 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 float rbvalue = rating;
-                Log.d("'", ""+rbvalue);
+                Log.d("'", "" + rbvalue);
 
                 //insert value into internal queue
                 publishRatingMessage(rbvalue);
@@ -117,7 +117,8 @@ public class MainPage extends AppCompatActivity {
                         AMQP.Queue.DeclareOk q = channel.queueDeclare();
                         channel.queueBind(q.getQueue(), "amq.fanout", "rating");
                         QueueingConsumer consumer = new QueueingConsumer(channel);
-                        channel.basicConsume(q.getQueue(), true, consumer);
+                        boolean autoAck = false;
+                        channel.basicConsume(q.getQueue(), autoAck, consumer);
 
                         // Process deliveries
                         while (true) {
@@ -132,6 +133,8 @@ public class MainPage extends AppCompatActivity {
                             bundle.putFloat("rating", message);
                             msg.setData(bundle);
                             handler.sendMessage(msg);
+                            boolean requeue = false;
+                            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), requeue );
                         }
                     } catch (InterruptedException e) {
                         break;
