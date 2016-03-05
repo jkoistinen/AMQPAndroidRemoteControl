@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AMQPAndroid</string>
+    <string name="title_activity_test">TestActivity</string>
+</resources>
