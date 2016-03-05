@@ -13,6 +13,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -24,6 +25,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -45,8 +47,10 @@ public class MainPage extends AppCompatActivity {
                 float message = msg.getData().getFloat("rating");
 
                 final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
-                rb.setRating(message);
-
+                if (rb.getRating() != message ) {
+                    rb.setRating(message);
+                    Log.d("'", "RatingBar changed!");
+                }
             }
         };
 
@@ -65,10 +69,13 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 float rbvalue = rating;
-                Log.d("'", "" + rbvalue);
-
-                //insert value into internal queue
-                publishRatingMessage(rbvalue);
+                Log.d("'", "rbvalue " + rbvalue);
+                Log.d("'", "fromUser "+fromUser);
+                //insert value into internal queue if fromUser
+                if(fromUser) {
+                    publishRatingMessage(rbvalue);
+                    Log.d("'", "onRatingChanged");
+                }
             }
         });
     }
@@ -82,7 +89,8 @@ public class MainPage extends AppCompatActivity {
         subscribeThread.interrupt();
     }
 
-    private BlockingDeque<Float> queueRating = new LinkedBlockingDeque<Float>();
+    int queuedepth = 1;
+    private BlockingDeque<Float> queueRating = new LinkedBlockingDeque(queuedepth);
     void publishRatingMessage(Float message) {
         //Adds a message to internal blocking queue
         try {
@@ -135,6 +143,7 @@ public class MainPage extends AppCompatActivity {
                             handler.sendMessage(msg);
                             boolean requeue = false;
                             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), requeue );
+                            Log.d("'", "Consumed message!");
                         }
                     } catch (InterruptedException e) {
                         break;
@@ -164,6 +173,8 @@ public class MainPage extends AppCompatActivity {
                         ch.confirmSelect();
 
                         while (true) {
+                            int quesize = queueRating.size();
+                            Log.d("'", "QueueSize: "+quesize);
                             Float message = queueRating.takeFirst();
                             try{
 
@@ -172,6 +183,7 @@ public class MainPage extends AppCompatActivity {
 
                                 ch.basicPublish("amq.fanout", "rating", null, buf.array());
                                 Log.d("'", "[s]rating " + message);
+
                                 ch.waitForConfirmsOrDie();
                             } catch (Exception e){
                                 Log.d("'","[f]rating " + message);
