@@ -34,33 +34,9 @@ public class MainPage extends AppCompatActivity {
         setContentView(R.layout.activity_main_page);
 
         setupConnectionFactory();
-        publishToAMQP();
         publishToAMQPRating();
-        setupPubButton();
-        setupDummyPubButton();
+
         setupRatingBar();
-
-        final Handler incomingMessageHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                String message = msg.getData().getString("msg");
-                TextView tv = (TextView) findViewById(R.id.textView);
-                Date now = new Date();
-                SimpleDateFormat ft = new SimpleDateFormat ("hh:mm:ss");
-                tv.append(ft.format(now) + ' ' + message + '\n');
-
-                //Update scrollView to show bottom
-                final ScrollView sc = (ScrollView) findViewById(R.id.scrollView);
-                sc.post(new Runnable()
-                {
-                    public void run()
-                    {
-                        sc.fullScroll(View.FOCUS_DOWN);
-                    }
-                });
-
-            }
-        };
 
         final Handler incomingRatingMessageHandler = new Handler() {
             @Override
@@ -74,28 +50,16 @@ public class MainPage extends AppCompatActivity {
             }
         };
 
-        subscribe(incomingMessageHandler);
         subscribeRating(incomingRatingMessageHandler);
     }
 
-    void setupPubButton() {
-        Button button = (Button) findViewById(R.id.publish);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                EditText et = (EditText) findViewById(R.id.text);
-                publishMessage(et.getText().toString());
-                Log.d("'", et.getText().toString());
-                et.setText("");
-            }
-        });
-    }
+
 
     void setupRatingBar() {
         final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
 
         //Initial rating
-        rb.setRating((float) 2.5);
+        //rb.setRating((float) 2.5);
 
         rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -109,24 +73,6 @@ public class MainPage extends AppCompatActivity {
         });
     }
 
-    void setupDummyPubButton() {
-        Button button = (Button) findViewById(R.id.buttondummymsg);
-        button.setOnClickListener(new View.OnClickListener() {
-            int counter = 0;
-
-            @Override
-            public void onClick(View arg0) {
-                while (counter < 100) {
-                    String msg = "Dummy message " + counter;
-                    counter++;
-                    publishMessage(msg);
-                    Log.d("'", msg);
-                }
-                counter = 0;
-            }
-        });
-    }
-
     Thread subscribeThread;
     Thread publishThread;
     @Override
@@ -134,17 +80,6 @@ public class MainPage extends AppCompatActivity {
         super.onDestroy();
         publishThread.interrupt();
         subscribeThread.interrupt();
-    }
-
-    private BlockingDeque<String> queue = new LinkedBlockingDeque<String>();
-    void publishMessage(String message) {
-        //Adds a message to internal blocking queue
-        try {
-            Log.d("'", "[q] " + message);
-            queue.putLast(message);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private BlockingDeque<Float> queueRating = new LinkedBlockingDeque<Float>();
@@ -169,51 +104,6 @@ public class MainPage extends AppCompatActivity {
         }
     }
 
-    void subscribe(final Handler handler)
-    {
-        subscribeThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true) {
-                    try {
-                        Connection connection = factory.newConnection();
-                        Channel channel = connection.createChannel();
-                        channel.basicQos(1);
-                        AMQP.Queue.DeclareOk q = channel.queueDeclare();
-                        channel.queueBind(q.getQueue(), "amq.fanout", "chat");
-                        QueueingConsumer consumer = new QueueingConsumer(channel);
-                        channel.basicConsume(q.getQueue(), true, consumer);
-
-                        // Process deliveries
-                        while (true) {
-                            QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-
-                            String message = new String(delivery.getBody());
-                            Log.d("'","[r] " + message);
-
-                            Message msg = handler.obtainMessage();
-                            Bundle bundle = new Bundle();
-
-                            bundle.putString("msg", message);
-                            msg.setData(bundle);
-                            handler.sendMessage(msg);
-                        }
-                    } catch (InterruptedException e) {
-                        break;
-                    } catch (Exception e1) {
-                        Log.d("'", "Connection broken: " + e1.getClass().getName());
-                        try {
-                            Thread.sleep(4000); //sleep and then try again
-                        } catch (InterruptedException e) {
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-        subscribeThread.start();
-    }
-
     void subscribeRating(final Handler handler)
     {
         subscribeThread = new Thread(new Runnable() {
@@ -233,8 +123,8 @@ public class MainPage extends AppCompatActivity {
                         while (true) {
                             QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 
-                            final ByteBuffer buf = ByteBuffer.wrap(delivery.getBody());
-                            final float message = buf.getFloat();
+                            ByteBuffer buf = ByteBuffer.wrap(delivery.getBody());
+                            float message = buf.getFloat();
 
                             Message msg = handler.obtainMessage();
                             Bundle bundle = new Bundle();
@@ -257,45 +147,6 @@ public class MainPage extends AppCompatActivity {
             }
         });
         subscribeThread.start();
-    }
-
-    public void publishToAMQP()
-    {
-        publishThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true) {
-                    try {
-                        Connection connection = factory.newConnection();
-                        Channel ch = connection.createChannel();
-                        ch.confirmSelect();
-
-                        while (true) {
-                            String message = queue.takeFirst();
-                            try{
-                                ch.basicPublish("amq.fanout", "chat", null, message.getBytes());
-                                Log.d("'", "[s] " + message);
-                                ch.waitForConfirmsOrDie();
-                            } catch (Exception e){
-                                Log.d("'","[f] " + message);
-                                queue.putFirst(message);
-                                throw e;
-                            }
-                        }
-                    } catch (InterruptedException e) {
-                        break;
-                    } catch (Exception e) {
-                        Log.d("'", "Connection broken: " + e.getClass().getName());
-                        try {
-                            Thread.sleep(5000); //sleep and then try again
-                        } catch (InterruptedException e1) {
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-        publishThread.start();
     }
 
     public void publishToAMQPRating()
