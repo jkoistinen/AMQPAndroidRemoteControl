@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AMQPAndroid.iml" filepath="$PROJECT_DIR$/AMQPAndroid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/AMQPAndroidRemoteControl.iml" filepath="$PROJECT_DIR$/.idea/AMQPAndroidRemoteControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AMQPAndroidRemoteControlTest.iml" filepath="$PROJECT_DIR$/AMQPAndroidRemoteControlTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
