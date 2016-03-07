@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class SecondActivity extends AppCompatActivity {
+public class SecondActivity extends SuperActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,36 +61,6 @@ public class SecondActivity extends AppCompatActivity {
             }
         };
         subscribe(incomingMessageHandler);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.game_menu, menu);
-
-        menu.add(0,0,0,"Main").setIntent(new Intent(this, MainActivity.class));
-        menu.add(1,1,1,"Second").setIntent(new Intent(this, SecondActivity.class));
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        Log.d("'", "select!" + item.getItemId());
-
-        switch (item.getItemId()) {
-            case 0:
-                Log.d("'", "select! 0");
-                startActivity(item.getIntent());
-                return true;
-            case 1:
-                Log.d("'", "select! 1");
-                startActivity(item.getIntent());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     void setupPubButton() {
