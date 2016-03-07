@@ -113,17 +113,6 @@ public class SecondActivity extends SuperActivity {
         }
     }
 
-    ConnectionFactory factory = new ConnectionFactory();
-    private void setupConnectionFactory() {
-        String uri = getString(R.string.amqpuri);
-        try {
-            factory.setAutomaticRecoveryEnabled(false);
-            factory.setUri(uri);
-        } catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e1) {
-            e1.printStackTrace();
-        }
-    }
-
     void subscribe(final Handler handler)
     {
         subscribeThread = new Thread(new Runnable() {

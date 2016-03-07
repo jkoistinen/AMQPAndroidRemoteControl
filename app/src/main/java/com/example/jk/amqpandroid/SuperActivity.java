@@ -6,6 +6,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.test.server.HATests;
+
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by jk on 2016-03-07.
  */
@@ -40,5 +47,18 @@ public class SuperActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    ConnectionFactory factory = new ConnectionFactory();
+    void setupConnectionFactory() {
+        String uri = getString(R.string.amqpuri);
+        Log.d("'", "New conn!");
+        try {
+            factory.setAutomaticRecoveryEnabled(false);
+            factory.setUri(uri);
+        } catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e1) {
+            e1.printStackTrace();
+        }
+    }
+
 
 }

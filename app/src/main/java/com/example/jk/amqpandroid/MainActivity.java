@@ -92,16 +92,7 @@ public class MainActivity extends SuperActivity {
         }
     }
 
-    ConnectionFactory factory = new ConnectionFactory();
-    private void setupConnectionFactory() {
-        String uri = getString(R.string.amqpuri);
-        try {
-            factory.setAutomaticRecoveryEnabled(false);
-            factory.setUri(uri);
-        } catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e1) {
-            e1.printStackTrace();
-        }
-    }
+
 
     void subscribeRating(final Handler handler)
     {
