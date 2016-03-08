@@ -11,25 +11,38 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
 
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class MainActivity extends SuperActivity {
 
-    Handler incomingRatingMessageHandler = new Handler() {
+    private static class MyHandler extends Handler {
+        private final WeakReference<MainActivity> mActivity;
+
+        public MyHandler(MainActivity activity) {
+            mActivity = new WeakReference<MainActivity>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
 
-            float message = msg.getData().getFloat("rating");
+            MainActivity activity = mActivity.get();
 
-            final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
-            if (rb.getRating() != message ) {
-                rb.setRating(message);
-                Log.d("'", "RatingBar changed!");
+            if (activity != null) {
+
+                float message = msg.getData().getFloat("rating");
+
+                RatingBar rb = (RatingBar) activity.findViewById(R.id.ratingBar);
+                if (rb.getRating() != message) {
+                    rb.setRating(message);
+                    Log.d("'", "RatingBar changed!");
+                }
             }
         }
-    };
+    }
+    private final MyHandler mHandler = new MyHandler(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +53,7 @@ public class MainActivity extends SuperActivity {
         publishToAMQPRating();
         setupRatingBar();
 
-        subscribeRating(incomingRatingMessageHandler);
+        subscribeRating(mHandler);
     }
 
     private void setupRatingBar() {
@@ -53,9 +66,9 @@ public class MainActivity extends SuperActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 Log.d("'", "rbvalue " + rating);
-                Log.d("'", "fromUser "+fromUser);
+                Log.d("'", "fromUser " + fromUser);
                 //insert value into internal queue if fromUser
-                if(fromUser) {
+                if (fromUser) {
                     publishRatingMessage(rating);
                     Log.d("'", "onRatingChanged");
                 }
