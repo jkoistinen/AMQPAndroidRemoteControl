@@ -16,7 +16,7 @@ public class SuperActivity extends AppCompatActivity {
 
         menu.add(0,0,0,"Rating").setIntent(new Intent(this, MainActivity.class));
         menu.add(1,1,1,"Chat").setIntent(new Intent(this, SecondActivity.class));
-        menu.add(2,2,2,"Test");
+        menu.add(2,2,2,"Image").setIntent(new Intent(this, ThirdActivity.class));;
 
         return true;
     }
