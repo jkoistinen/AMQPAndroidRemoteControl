@@ -1,13 +1,9 @@
 package com.example.jk.amqpandroid;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,12 +13,8 @@ import android.widget.TextView;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.BlockingDeque;
@@ -63,7 +55,7 @@ public class SecondActivity extends SuperActivity {
         subscribe(incomingMessageHandler);
     }
 
-    void setupPubButton() {
+    private void setupPubButton() {
         Button button = (Button) findViewById(R.id.publish);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +68,7 @@ public class SecondActivity extends SuperActivity {
         });
     }
 
-    void setupDummyPubButton() {
+    private void setupDummyPubButton() {
         Button button = (Button) findViewById(R.id.buttondummymsg);
         button.setOnClickListener(new View.OnClickListener() {
             int counter = 0;
@@ -93,8 +85,8 @@ public class SecondActivity extends SuperActivity {
         });
     }
 
-    Thread subscribeThread;
-    Thread publishThread;
+    private Thread subscribeThread;
+    private Thread publishThread;
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -102,8 +94,8 @@ public class SecondActivity extends SuperActivity {
         subscribeThread.interrupt();
     }
 
-    private BlockingDeque<String> queue = new LinkedBlockingDeque<String>();
-    void publishMessage(String message) {
+    private final BlockingDeque<String> queue = new LinkedBlockingDeque<String>();
+    private void publishMessage(String message) {
         //Adds a message to internal blocking queue
         try {
             Log.d("'", "[q] " + message);
@@ -113,7 +105,7 @@ public class SecondActivity extends SuperActivity {
         }
     }
 
-    void subscribe(final Handler handler)
+    private void subscribe(final Handler handler)
     {
         subscribeThread = new Thread(new Runnable() {
             @Override
@@ -158,7 +150,7 @@ public class SecondActivity extends SuperActivity {
         subscribeThread.start();
     }
 
-    public void publishToAMQP()
+    private void publishToAMQP()
     {
         publishThread = new Thread(new Runnable() {
             @Override

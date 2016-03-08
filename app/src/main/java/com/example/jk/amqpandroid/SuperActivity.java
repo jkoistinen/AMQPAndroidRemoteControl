@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.test.server.HATests;
 
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
@@ -48,7 +47,7 @@ public class SuperActivity extends AppCompatActivity {
         }
     }
 
-    ConnectionFactory factory = new ConnectionFactory();
+    final ConnectionFactory factory = new ConnectionFactory();
     void setupConnectionFactory() {
         String uri = getString(R.string.amqpuri);
         Log.d("'", "New conn!");

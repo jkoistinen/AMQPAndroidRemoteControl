@@ -1,29 +1,36 @@
 package com.example.jk.amqpandroid;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.RatingBar;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class MainActivity extends SuperActivity {
+
+    Handler incomingRatingMessageHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            float message = msg.getData().getFloat("rating");
+
+            final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
+            if (rb.getRating() != message ) {
+                rb.setRating(message);
+                Log.d("'", "RatingBar changed!");
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,24 +40,10 @@ public class MainActivity extends SuperActivity {
         publishToAMQPRating();
         setupRatingBar();
 
-          Handler incomingRatingMessageHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-
-                float message = msg.getData().getFloat("rating");
-
-                final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
-                if (rb.getRating() != message ) {
-                    rb.setRating(message);
-                    Log.d("'", "RatingBar changed!");
-                }
-            }
-        };
-
         subscribeRating(incomingRatingMessageHandler);
     }
 
-    void setupRatingBar() {
+    private void setupRatingBar() {
         final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
 
         //Initial rating
@@ -59,20 +52,19 @@ public class MainActivity extends SuperActivity {
         rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                float rbvalue = rating;
-                Log.d("'", "rbvalue " + rbvalue);
+                Log.d("'", "rbvalue " + rating);
                 Log.d("'", "fromUser "+fromUser);
                 //insert value into internal queue if fromUser
                 if(fromUser) {
-                    publishRatingMessage(rbvalue);
+                    publishRatingMessage(rating);
                     Log.d("'", "onRatingChanged");
                 }
             }
         });
     }
 
-    Thread subscribeThread;
-    Thread publishThread;
+    private Thread subscribeThread;
+    private Thread publishThread;
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -80,9 +72,9 @@ public class MainActivity extends SuperActivity {
         subscribeThread.interrupt();
     }
 
-    int queuedepth = 1;
-    private BlockingDeque<Float> queueRating = new LinkedBlockingDeque(queuedepth);
-    void publishRatingMessage(Float message) {
+    private final int queuedepth = 1;
+    private final BlockingDeque<Float> queueRating = new LinkedBlockingDeque(queuedepth);
+    private void publishRatingMessage(Float message) {
         //Adds a message to internal blocking queue
         try {
             Log.d("'", "[qRating] " + message);
@@ -94,7 +86,7 @@ public class MainActivity extends SuperActivity {
 
 
 
-    void subscribeRating(final Handler handler)
+    private void subscribeRating(final Handler handler)
     {
         subscribeThread = new Thread(new Runnable() {
             @Override
@@ -143,7 +135,7 @@ public class MainActivity extends SuperActivity {
         subscribeThread.start();
     }
 
-    public void publishToAMQPRating()
+    private void publishToAMQPRating()
     {
         publishThread = new Thread(new Runnable() {
             @Override
