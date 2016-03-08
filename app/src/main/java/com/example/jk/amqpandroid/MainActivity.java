@@ -99,7 +99,7 @@ public class MainActivity extends SuperActivity {
             public void run() {
                 while(true) {
                     try {
-                        Connection connection = factory.newConnection();
+                        Connection connection = createConnection();
                         Channel channel = connection.createChannel();
                         channel.basicQos(1);
                         AMQP.Queue.DeclareOk q = channel.queueDeclare();

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
 import java.net.URISyntaxException;
@@ -47,9 +48,26 @@ public class SuperActivity extends AppCompatActivity {
     }
 
     final ConnectionFactory factory = new ConnectionFactory();
+
+Connection createConnection() {
+try {
+        Connection connection = factory.newConnection();
+        return connection;
+    } catch (java.io.IOException e1) {
+    Log.d("'", "IOException: " + e1.getClass().getName());
+    } catch (java.util.concurrent.TimeoutException e1) {
+    Log.d("'", "TimeoutException: " + e1.getClass().getName());
+    }
+    return null;
+}
+
+
     void setupConnectionFactory() {
         String uri = getString(R.string.amqpuri);
         Log.d("'", "New conn!");
+
+        //createConnection();
+
         try {
             factory.setAutomaticRecoveryEnabled(false);
             factory.setUri(uri);
