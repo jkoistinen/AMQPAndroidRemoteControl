@@ -15,12 +15,48 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class SecondActivity extends SuperActivity {
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<SecondActivity> mActivity;
+
+        public MyHandler(SecondActivity activity) {
+            mActivity = new WeakReference<SecondActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            SecondActivity activity = mActivity.get();
+
+            if (activity != null) {
+
+                String message = msg.getData().getString("msg");
+                TextView tv = (TextView) activity.findViewById(R.id.textView);
+                Date now = new Date();
+                SimpleDateFormat ft = new SimpleDateFormat ("hh:mm:ss");
+                tv.append(ft.format(now) + ' ' + message + '\n');
+
+                //Update scrollView to show bottom
+                final ScrollView sc = (ScrollView) activity.findViewById(R.id.scrollView);
+                sc.post(new Runnable()
+                {
+                    public void run()
+                    {
+                        sc.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
+            }
+        }
+    }
+    private final MyHandler mHandler = new MyHandler(this);
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,29 +66,7 @@ public class SecondActivity extends SuperActivity {
         publishToAMQP();
         setupPubButton();
         setupDummyPubButton();
-
-        final Handler incomingMessageHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                String message = msg.getData().getString("msg");
-                TextView tv = (TextView) findViewById(R.id.textView);
-                Date now = new Date();
-                SimpleDateFormat ft = new SimpleDateFormat ("hh:mm:ss");
-                tv.append(ft.format(now) + ' ' + message + '\n');
-
-                //Update scrollView to show bottom
-                final ScrollView sc = (ScrollView) findViewById(R.id.scrollView);
-                sc.post(new Runnable()
-                {
-                    public void run()
-                    {
-                        sc.fullScroll(View.FOCUS_DOWN);
-                    }
-                });
-
-            }
-        };
-        subscribe(incomingMessageHandler);
+        subscribe(mHandler);
     }
 
     private void setupPubButton() {
@@ -72,6 +86,7 @@ public class SecondActivity extends SuperActivity {
         Button button = (Button) findViewById(R.id.buttondummymsg);
         button.setOnClickListener(new View.OnClickListener() {
             int counter = 0;
+
             @Override
             public void onClick(View arg0) {
                 while (counter < 10) {
