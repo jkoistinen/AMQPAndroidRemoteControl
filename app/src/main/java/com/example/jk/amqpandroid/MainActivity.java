@@ -101,7 +101,7 @@ public class MainActivity extends SuperActivity {
                         //This functions and data are in GlobalApp java, it has the same lifecycle as Activity but for the entire App
                         GlobalApp gApp = (GlobalApp)getApplicationContext();
 
-                        Connection connection = gApp.connhelper.getConnection();
+                        Connection connection = gApp.connection;
 
                         if (connection.isOpen()){
                             Log.d("'", "Connection open...");
@@ -161,7 +161,7 @@ public class MainActivity extends SuperActivity {
                         //Connection connection = factory.newConnection();
                         GlobalApp gApp = (GlobalApp)getApplicationContext();
 
-                        Connection connection = gApp.connhelper.getConnection();
+                        Connection connection = gApp.connection;
                         Channel ch = connection.createChannel();
                         ch.confirmSelect();
 

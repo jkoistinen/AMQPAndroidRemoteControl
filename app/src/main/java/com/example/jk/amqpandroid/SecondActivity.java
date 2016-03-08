@@ -128,7 +128,7 @@ public class SecondActivity extends SuperActivity {
                     try {
                         GlobalApp gApp = (GlobalApp)getApplicationContext();
 
-                        Connection connection = gApp.connhelper.getConnection();
+                        Connection connection = gApp.connection;
 
                         Channel channel = connection.createChannel();
                         channel.basicQos(1);
@@ -176,7 +176,7 @@ public class SecondActivity extends SuperActivity {
                     try {
                         GlobalApp gApp = (GlobalApp)getApplicationContext();
 
-                        Connection connection = gApp.connhelper.getConnection();
+                        Connection connection = gApp.connection;
 
                         Channel ch = connection.createChannel();
                         ch.confirmSelect();
