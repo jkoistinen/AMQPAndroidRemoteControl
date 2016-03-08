@@ -22,7 +22,7 @@ public class MainActivity extends SuperActivity {
         private final WeakReference<MainActivity> mActivity;
 
         public MyHandler(MainActivity activity) {
-            mActivity = new WeakReference<MainActivity>(activity);
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override
@@ -52,15 +52,11 @@ public class MainActivity extends SuperActivity {
         setupConnectionFactory();
         publishToAMQPRating();
         setupRatingBar();
-
         subscribeRating(mHandler);
     }
 
     private void setupRatingBar() {
         final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
-
-        //Initial rating
-        //rb.setRating((float) 2.5);
 
         rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -85,8 +81,7 @@ public class MainActivity extends SuperActivity {
         subscribeThread.interrupt();
     }
 
-    private final int queuedepth = 1;
-    private final BlockingDeque<Float> queueRating = new LinkedBlockingDeque(queuedepth);
+    private final BlockingDeque<Float> queueRating = new LinkedBlockingDeque();
     private void publishRatingMessage(Float message) {
         //Adds a message to internal blocking queue
         try {
@@ -96,8 +91,6 @@ public class MainActivity extends SuperActivity {
             e.printStackTrace();
         }
     }
-
-
 
     private void subscribeRating(final Handler handler)
     {

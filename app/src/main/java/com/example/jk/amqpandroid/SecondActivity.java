@@ -27,7 +27,7 @@ public class SecondActivity extends SuperActivity {
         private final WeakReference<SecondActivity> mActivity;
 
         public MyHandler(SecondActivity activity) {
-            mActivity = new WeakReference<SecondActivity>(activity);
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override

@@ -19,11 +19,10 @@ public class SuperActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.game_menu, menu);
 
-        menu.add(0,0,0,"Main").setIntent(new Intent(this, MainActivity.class));
-        menu.add(1,1,1,"Second").setIntent(new Intent(this, SecondActivity.class));
+        menu.add(0,0,0,"Rating").setIntent(new Intent(this, MainActivity.class));
+        menu.add(1,1,1,"Chat").setIntent(new Intent(this, SecondActivity.class));
+        menu.add(2,2,2,"Test");
 
         return true;
     }
