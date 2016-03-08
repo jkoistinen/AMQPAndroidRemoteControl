@@ -178,15 +178,15 @@ public class SecondActivity extends SuperActivity {
 
                         Connection connection = gApp.connection;
 
-                        Channel ch = connection.createChannel();
-                        ch.confirmSelect();
+                        Channel channel = connection.createChannel();
+                        channel.confirmSelect();
 
                         while (true) {
                             String message = queue.takeFirst();
                             try{
-                                ch.basicPublish("amq.fanout", "chat", null, message.getBytes());
+                                channel.basicPublish("amq.fanout", "chat", null, message.getBytes());
                                 Log.d("'", "[s] " + message);
-                                ch.waitForConfirmsOrDie();
+                                channel.waitForConfirmsOrDie();
                             } catch (Exception e){
                                 Log.d("'","[f] " + message);
                                 queue.putFirst(message);

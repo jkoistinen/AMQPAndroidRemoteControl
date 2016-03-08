@@ -111,6 +111,7 @@ public class MainActivity extends SuperActivity {
 
                         //Connection connection = factory.newConnection();
                         Channel channel = connection.createChannel();
+
                         channel.basicQos(1);
                         AMQP.Queue.DeclareOk q = channel.queueDeclare();
                         channel.queueBind(q.getQueue(), "amq.fanout", "rating");
@@ -162,8 +163,8 @@ public class MainActivity extends SuperActivity {
                         GlobalApp gApp = (GlobalApp)getApplicationContext();
 
                         Connection connection = gApp.connection;
-                        Channel ch = connection.createChannel();
-                        ch.confirmSelect();
+                        Channel channel = connection.createChannel();
+                        channel.confirmSelect();
 
                         while (true) {
                             int quesize = queueRating.size();
@@ -174,10 +175,10 @@ public class MainActivity extends SuperActivity {
                                 //Allocate space for one float (ch.basicPublish only likes ByteArrays)
                                 final ByteBuffer buf = ByteBuffer.allocate(4).putFloat(message);
 
-                                ch.basicPublish("amq.fanout", "rating", null, buf.array());
+                                channel.basicPublish("amq.fanout", "rating", null, buf.array());
                                 Log.d("'", "[s]rating " + message);
 
-                                ch.waitForConfirmsOrDie();
+                                channel.waitForConfirmsOrDie();
                             } catch (Exception e){
                                 Log.d("'","[f]rating " + message);
                                 queueRating.putFirst(message);
