@@ -74,7 +74,7 @@ public class SecondActivity extends SuperActivity {
             int counter = 0;
             @Override
             public void onClick(View arg0) {
-                while (counter < 100) {
+                while (counter < 10) {
                     String msg = "Dummy message " + counter;
                     counter++;
                     publishMessage(msg);
