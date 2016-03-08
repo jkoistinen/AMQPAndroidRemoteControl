@@ -49,7 +49,6 @@ public class MainActivity extends SuperActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        setupConnectionFactory();
         publishToAMQPRating();
         setupRatingBar();
         subscribeRating(mHandler);
@@ -99,7 +98,18 @@ public class MainActivity extends SuperActivity {
             public void run() {
                 while(true) {
                     try {
-                        Connection connection = factory.newConnection();
+                        //This functions and data are in GlobalApp java, it has the same lifecycle as Activity but for the entire App
+                        GlobalApp gApp = (GlobalApp)getApplicationContext();
+
+                        Connection connection = gApp.connhelper.getConnection();
+
+                        if (connection.isOpen()){
+                            Log.d("'", "Connection open...");
+                        } else {
+                            Log.d("'", "Connecion closed...");
+                        }
+
+                        //Connection connection = factory.newConnection();
                         Channel channel = connection.createChannel();
                         channel.basicQos(1);
                         AMQP.Queue.DeclareOk q = channel.queueDeclare();
@@ -128,7 +138,7 @@ public class MainActivity extends SuperActivity {
                     } catch (InterruptedException e) {
                         break;
                     } catch (Exception e1) {
-                        Log.d("'", "Connection broken: " + e1.getClass().getName());
+                        Log.d("'", "Connection subscribeThread broken: " + e1.getClass().getName());
                         try {
                             Thread.sleep(4000); //sleep and then try again
                         } catch (InterruptedException e) {
@@ -148,7 +158,10 @@ public class MainActivity extends SuperActivity {
             public void run() {
                 while(true) {
                     try {
-                        Connection connection = factory.newConnection();
+                        //Connection connection = factory.newConnection();
+                        GlobalApp gApp = (GlobalApp)getApplicationContext();
+
+                        Connection connection = gApp.connhelper.getConnection();
                         Channel ch = connection.createChannel();
                         ch.confirmSelect();
 
@@ -174,7 +187,7 @@ public class MainActivity extends SuperActivity {
                     } catch (InterruptedException e) {
                         break;
                     } catch (Exception e) {
-                        Log.d("'", "Connection broken: " + e.getClass().getName());
+                        Log.d("'", "Connection publishThread broken: " + e.getClass().getName());
                         try {
                             Thread.sleep(5000); //sleep and then try again
                         } catch (InterruptedException e1) {

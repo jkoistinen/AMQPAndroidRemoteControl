@@ -62,7 +62,6 @@ public class SecondActivity extends SuperActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        setupConnectionFactory();
         publishToAMQP();
         setupPubButton();
         setupDummyPubButton();
@@ -127,7 +126,10 @@ public class SecondActivity extends SuperActivity {
             public void run() {
                 while(true) {
                     try {
-                        Connection connection = factory.newConnection();
+                        GlobalApp gApp = (GlobalApp)getApplicationContext();
+
+                        Connection connection = gApp.connhelper.getConnection();
+
                         Channel channel = connection.createChannel();
                         channel.basicQos(1);
                         AMQP.Queue.DeclareOk q = channel.queueDeclare();
@@ -172,7 +174,10 @@ public class SecondActivity extends SuperActivity {
             public void run() {
                 while(true) {
                     try {
-                        Connection connection = factory.newConnection();
+                        GlobalApp gApp = (GlobalApp)getApplicationContext();
+
+                        Connection connection = gApp.connhelper.getConnection();
+
                         Channel ch = connection.createChannel();
                         ch.confirmSelect();
 

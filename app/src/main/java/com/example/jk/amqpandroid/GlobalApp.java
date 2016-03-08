@@ -1,5 +1,4 @@
 package com.example.jk.amqpandroid;
-
 import android.app.Application;
 import android.util.Log;
 
@@ -8,19 +7,16 @@ import android.util.Log;
  */
 public class GlobalApp extends Application {
 
-    //private stuffs
+    public AMQPConnectionHelper connhelper;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //dbHelper = new DbHelper(this);
         Log.d("'", "GlobalApp onCreate!!!");
 
-    }
+        AMQPConnectionHelper connhelper = new AMQPConnectionHelper(this);
 
-//    public SQLiteDatabase getDatabase(){
-//        return dbHelper.getWritableDatabase();
-//    }
+    }
 
     @Override
     public void onTerminate() {
