@@ -172,7 +172,13 @@ public class SecondActivity extends SuperActivity {
             public void run() {
                 while(true) {
                     try {
-                        Connection connection = factory.newConnection();
+                        //Connection connection = createConnection();
+
+                        AMQPConnectionHelper connhelper = new AMQPConnectionHelper();
+
+                        Connection connection = connhelper.createConnection();
+                        connhelper.setupConnectionFactory();
+
                         Channel ch = connection.createChannel();
                         ch.confirmSelect();
 

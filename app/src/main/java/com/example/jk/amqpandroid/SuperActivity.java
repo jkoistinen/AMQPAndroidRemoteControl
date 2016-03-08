@@ -23,7 +23,7 @@ public class SuperActivity extends AppCompatActivity {
 
         menu.add(0,0,0,"Rating").setIntent(new Intent(this, MainActivity.class));
         menu.add(1,1,1,"Chat").setIntent(new Intent(this, SecondActivity.class));
-        menu.add(2,2,2,"Test");
+        menu.add(2, 2, 2, "Test");
 
         return true;
     }
@@ -47,34 +47,12 @@ public class SuperActivity extends AppCompatActivity {
         }
     }
 
-    final ConnectionFactory factory = new ConnectionFactory();
-
-Connection createConnection() {
-try {
-        Connection connection = factory.newConnection();
-        return connection;
-    } catch (java.io.IOException e1) {
-    Log.d("'", "IOException: " + e1.getClass().getName());
-    } catch (java.util.concurrent.TimeoutException e1) {
-    Log.d("'", "TimeoutException: " + e1.getClass().getName());
-    }
-    return null;
-}
 
 
-    void setupConnectionFactory() {
-        String uri = getString(R.string.amqpuri);
-        Log.d("'", "New conn!");
 
-        //createConnection();
 
-        try {
-            factory.setAutomaticRecoveryEnabled(false);
-            factory.setUri(uri);
-        } catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e1) {
-            e1.printStackTrace();
-        }
-    }
+
+
 
 
 }
