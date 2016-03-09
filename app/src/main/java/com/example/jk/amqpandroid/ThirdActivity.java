@@ -16,6 +16,7 @@ package com.example.jk.amqpandroid;
  */
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,13 @@ public class ThirdActivity extends SuperActivity {
         setContentView(R.layout.activity_third);
 
         mContainerView = (ViewGroup) findViewById(R.id.container);
+
+        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                addItem();
+            }
+        });
 
     }
 
