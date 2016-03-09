@@ -2,32 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/design/23.2.0/jars/classes.jar"
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.2.0/jars/classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="1aa5b025efe97f5006f5be16d6ca67c6c3c0c0d8">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-design-23.2.0_62cd07564f4a34f8c6fbca7b75f99adbd378ce1a.jar" />
-    </item>
-    <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/rabbitmq-client.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="42518d1c5514694a13017a195d9ea7e2bade6945">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/rabbitmq-client_a7fbeeb948e0eeda49a18a2689238fb7c01f07d1.jar" />
-    </item>
-    <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.0/jars/libs/internal_impl-23.2.0.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="6e239441500605809818997dd63b62a947195f8c">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/internal_impl-23.2.0_113bd8701f491f889edec11a2a452ab83bea285c.jar" />
-    </item>
-    <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="6e3578f92f7462d1a935a1d36173e3bdd1234976">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.2.0_3bb0a2953e6d1ffd20da4395288be46cab374e20.jar" />
+        sha1="8c108c22c99e794eff255bb34d2a461200c4cbb0">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-23.2.0_7e4047e1cf3d71c9914d8c8e410609d8d0cf82d9.jar" />
     </item>
     <item
         jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.2.0/jars/classes.jar"
@@ -44,39 +23,11 @@
         <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/rabbitmq-client-tests_82a514189d81a31080b2ce51831d90245854b556.jar" />
     </item>
     <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.2.0/jars/classes.jar"
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/commons-cli-1.1.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="292a9fa091757208efa65e77eef63088247e51f3">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-23.2.0_27d6e9bbe66736b71e0407b9dbfe47f812f524cf.jar" />
-    </item>
-    <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/hamcrest-core.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="42a25dc3219429f0e5d060061f71acb49bf010a0">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/hamcrest-core_42467b7e55b0b0df4c2aa2933ddb16d7b4377f1c.jar" />
-    </item>
-    <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="e5f32fa48a3eb2de0c987025c11b6e3864b634d9">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.2.0_9a5fa7091400a8a678b7bb8dbdda0710425896b6.jar" />
-    </item>
-    <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/junit.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="2973d150c0dc1fefe998f834810d68f278ea58ec">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/junit_18e5b53148ee6d04c345dd1ae8a9f647b9bece61.jar" />
-    </item>
-    <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="8c108c22c99e794eff255bb34d2a461200c4cbb0">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-23.2.0_7e4047e1cf3d71c9914d8c8e410609d8d0cf82d9.jar" />
+        sha1="11c98b99ad538f2f67633afd4d7f4d98ecfbb408">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/commons-cli-1.1_23b4339a904ff5e987fe9d91c0c4a1c677ebfa72.jar" />
     </item>
     <item
         jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/commons-io-1.2.jar"
@@ -86,11 +37,39 @@
         <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/commons-io-1.2_d1c1149bd715050d6c954450a61b23e73a967848.jar" />
     </item>
     <item
-        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/commons-cli-1.1.jar"
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.0/jars/classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="11c98b99ad538f2f67633afd4d7f4d98ecfbb408">
-        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/commons-cli-1.1_23b4339a904ff5e987fe9d91c0c4a1c677ebfa72.jar" />
+        sha1="e5f32fa48a3eb2de0c987025c11b6e3864b634d9">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.2.0_9a5fa7091400a8a678b7bb8dbdda0710425896b6.jar" />
+    </item>
+    <item
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="292a9fa091757208efa65e77eef63088247e51f3">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-23.2.0_27d6e9bbe66736b71e0407b9dbfe47f812f524cf.jar" />
+    </item>
+    <item
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="6e3578f92f7462d1a935a1d36173e3bdd1234976">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.2.0_3bb0a2953e6d1ffd20da4395288be46cab374e20.jar" />
+    </item>
+    <item
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.0/jars/libs/internal_impl-23.2.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="6e239441500605809818997dd63b62a947195f8c">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/internal_impl-23.2.0_113bd8701f491f889edec11a2a452ab83bea285c.jar" />
+    </item>
+    <item
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/exploded-aar/com.android.support/design/23.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="1aa5b025efe97f5006f5be16d6ca67c6c3c0c0d8">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/com.android.support-design-23.2.0_62cd07564f4a34f8c6fbca7b75f99adbd378ce1a.jar" />
     </item>
     <item
         jar="/home/jk/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.2.0/support-annotations-23.2.0.jar"
@@ -98,6 +77,27 @@
         revision="23.0.2"
         sha1="c5bf571bb10462bd90e5419ade67793f71acbc87">
         <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/support-annotations-23.2.0_415768f63a187b62ff332193f554b62fdf777219.jar" />
+    </item>
+    <item
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/hamcrest-core.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="42a25dc3219429f0e5d060061f71acb49bf010a0">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/hamcrest-core_42467b7e55b0b0df4c2aa2933ddb16d7b4377f1c.jar" />
+    </item>
+    <item
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/junit.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="2973d150c0dc1fefe998f834810d68f278ea58ec">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/junit_18e5b53148ee6d04c345dd1ae8a9f647b9bece61.jar" />
+    </item>
+    <item
+        jar="/home/jk/AndroidStudioProjects/AMQPDemo/app/libs/rabbitmq-client.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="42518d1c5514694a13017a195d9ea7e2bade6945">
+        <dex dex="/home/jk/AndroidStudioProjects/AMQPDemo/app/build/intermediates/pre-dexed/debug/rabbitmq-client_a7fbeeb948e0eeda49a18a2689238fb7c01f07d1.jar" />
     </item>
 
 </items>
