@@ -25,7 +25,7 @@ public class GlobalApp extends Application {
         super.onCreate();
         Log.d("'", "GlobalApp onCreate!!!");
 
-        //Execute in other Thread since this is the UI thread
+        //Execute in other Thread since this is the UI thread for the entire App
         Thread thread = new Thread(new Runnable(){
             @Override
             public void run() {
@@ -68,6 +68,6 @@ public class GlobalApp extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        //dbHelper.close();
+        //connection.close();
     }
 }

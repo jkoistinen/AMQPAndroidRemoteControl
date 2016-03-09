@@ -72,6 +72,7 @@ public class ThirdActivity extends SuperActivity {
                 mContainerView.removeView(newView);
 
                 // If there are no rows remaining, show the empty view.
+
                 if (mContainerView.getChildCount() == 0) {
                     findViewById(android.R.id.empty).setVisibility(View.VISIBLE);
                 }
