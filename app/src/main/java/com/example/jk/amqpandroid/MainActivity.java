@@ -167,8 +167,6 @@ public class MainActivity extends SuperActivity {
                         channel.confirmSelect();
 
                         while (true) {
-                            int quesize = queueRating.size();
-                            Log.d("'", "QueueSize: "+quesize);
                             Float message = queueRating.takeFirst();
                             try{
 
