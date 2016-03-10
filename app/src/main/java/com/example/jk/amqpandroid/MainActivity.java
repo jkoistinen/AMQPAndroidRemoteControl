@@ -1,5 +1,6 @@
 package com.example.jk.amqpandroid;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
@@ -44,14 +45,34 @@ public class MainActivity extends SuperActivity {
     }
     private final MyHandler mHandler = new MyHandler(this);
 
+    private Context mContext;
+
+    Channel channel;
+
+    GlobalApp gApp = (GlobalApp)getApplicationContext();
+
+    Context context = GlobalApp.getContext();
+
+    Connection connection = connection;
+
+    private void setChannel(){
+        try {
+            Channel channel = connection.createChannel();
+            this.channel = channel;
+        }catch(java.io.IOException e) {
+            Log.d("'", "Channel create failed: " + e.getClass().getName());
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        publishToAMQPRating();
-        setupRatingBar();
-        subscribeRating(mHandler);
+        //setChannel();
+        //publishToAMQPRating();
+        //setupRatingBar();
+        //subscribeRating(mHandler);
     }
 
     private void setupRatingBar() {
@@ -108,18 +129,20 @@ public class MainActivity extends SuperActivity {
                 while(true) {
                     try {
                         //This functions and data are in GlobalApp java, it has the same lifecycle as Activity but for the entire App
-                        GlobalApp gApp = (GlobalApp)getApplicationContext();
 
-                        Connection connection = gApp.connection;
+//                        if (connection.isOpen()){
+//                            Log.d("'", "Connection open...");
+//                        } else {
+//                            Log.d("'", "Connecion closed...");
+//                        }
 
-                        if (connection.isOpen()){
-                            Log.d("'", "Connection open...");
-                        } else {
-                            Log.d("'", "Connecion closed...");
-                        }
-
+                        //The channel creation should be done on MainActivity global space so channel.close() can be run onPause(), onDestroy() etc...
                         //Connection connection = factory.newConnection();
-                        Channel channel = connection.createChannel();
+
+                        MainActivity mApp = (MainActivity)getApplicationContext();
+
+                        //Channel channel = connection.createChannel();
+                        Channel channel = mApp.channel;
 
                         channel.basicQos(1);
                         AMQP.Queue.DeclareOk q = channel.queueDeclare();

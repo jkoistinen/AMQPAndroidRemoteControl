@@ -20,9 +20,21 @@ public class GlobalApp extends Application {
 
     Connection connection;
 
+    private static Application sApplication;
+
+    public static Application getApplication() {
+        return sApplication;
+    }
+
+    public static Context getContext() {
+        return getApplication().getApplicationContext();
+    }
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+        sApplication = this;
         Log.d("'", "GlobalApp onCreate!!!");
 
         //Execute in other Thread since this is the UI thread for the entire App
