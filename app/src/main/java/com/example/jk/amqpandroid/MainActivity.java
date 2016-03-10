@@ -16,6 +16,7 @@ import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeoutException;
 
 public class MainActivity extends SuperActivity {
 
@@ -116,6 +117,18 @@ public class MainActivity extends SuperActivity {
         this.channel = channel;
     }
 
+    private void closeChannel(){
+        try {
+            channel.close();
+            Log.d("'", "Channel "+channel.getChannelNumber()+" closed");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void subscribeRating(final Handler handler)
     {
         subscribeThread = new Thread(new Runnable() {
@@ -153,6 +166,7 @@ public class MainActivity extends SuperActivity {
                         }
 
                     } catch (InterruptedException e) {
+                        closeChannel();
                         break;
                     } catch (Exception e1) {
                         Log.d("'", "Connection subscribeThread broken: " + e1.getClass().getName());
