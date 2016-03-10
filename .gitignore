@@ -1,1 +1,3 @@
 app/src/main/res/values/privatestrings.xml
+.gradle/
+.idea/workspace.xml
