@@ -9,6 +9,7 @@ import android.widget.RatingBar;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
 import java.io.IOException;
@@ -78,6 +79,8 @@ public class MainActivity extends SuperActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d("'", "onDestroy called");
+
         publishThread.interrupt();
         subscribeThread.interrupt();
     }
@@ -111,21 +114,26 @@ public class MainActivity extends SuperActivity {
         return connection;
     }
 
-    private Channel channel;
+    public Channel channel;
     private void setChannel(Connection connection) throws IOException {
         Channel channel = connection.createChannel();
         this.channel = channel;
     }
 
-    private void closeChannel(){
+    private Channel getChannel(Connection connection) throws IOException {
+        Channel channel = connection.createChannel();
+        return channel;
+    }
+
+    private void closeChannel(Channel channelToClose){
         try {
-            channel.close();
-            Log.d("'", "Channel "+channel.getChannelNumber()+" closed");
+            channelToClose.close();
+            Log.d("'", "Channel "+channelToClose.getChannelNumber()+" closed");
 
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
+        } catch (TimeoutException e1) {
+            e1.printStackTrace();
         }
     }
 
@@ -138,15 +146,14 @@ public class MainActivity extends SuperActivity {
                     try {
 
                         Connection connection = getConnection();
+                        Channel channelSubscribe = getChannel(connection);
 
-                        setChannel(connection);
-
-                        channel.basicQos(1);
+                        channelSubscribe.basicQos(1);
                         AMQP.Queue.DeclareOk q = channel.queueDeclare();
-                        channel.queueBind(q.getQueue(), "amq.fanout", "rating");
-                        QueueingConsumer consumer = new QueueingConsumer(channel);
+                        channelSubscribe.queueBind(q.getQueue(), "amq.fanout", "rating");
+                        QueueingConsumer consumer = new QueueingConsumer(channelSubscribe);
                         boolean autoAck = false;
-                        channel.basicConsume(q.getQueue(), autoAck, consumer);
+                        channelSubscribe.basicConsume(q.getQueue(), autoAck, consumer);
 
                         // Process deliveries
                         while (true) {
@@ -162,11 +169,11 @@ public class MainActivity extends SuperActivity {
                             msg.setData(bundle);
                             handler.sendMessage(msg);
                             boolean requeue = false;
-                            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), requeue );
+                            channelSubscribe.basicAck(delivery.getEnvelope().getDeliveryTag(), requeue );
                         }
 
                     } catch (InterruptedException e) {
-                        closeChannel();
+                        //closeChannel(channelSubscribe);
                         break;
                     } catch (Exception e1) {
                         Log.d("'", "Connection subscribeThread broken: " + e1.getClass().getName());
@@ -189,12 +196,11 @@ public class MainActivity extends SuperActivity {
             public void run() {
                 while(true) {
                     try {
-                        //Connection connection = factory.newConnection();
-                        GlobalApp gApp = (GlobalApp)getApplicationContext();
 
-                        Connection connection = gApp.connection;
-                        Channel channel = connection.createChannel();
-                        channel.confirmSelect();
+                        Connection connection = getConnection();
+                        Channel channelPublish = getChannel(connection);
+
+                        channelPublish.confirmSelect();
 
                         while (true) {
                             Float message = queueRating.takeFirst();
@@ -203,10 +209,10 @@ public class MainActivity extends SuperActivity {
                                 //Allocate space for one float (ch.basicPublish only likes ByteArrays)
                                 final ByteBuffer buf = ByteBuffer.allocate(4).putFloat(message);
 
-                                channel.basicPublish("amq.fanout", "rating", null, buf.array());
+                                channelPublish.basicPublish("amq.fanout", "rating", null, buf.array());
                                 Log.d("'", "[s]rating " + message);
 
-                                channel.waitForConfirmsOrDie();
+                                channelPublish.waitForConfirmsOrDie();
                             } catch (Exception e){
                                 Log.d("'","[f]rating " + message);
                                 queueRating.putFirst(message);
@@ -214,12 +220,14 @@ public class MainActivity extends SuperActivity {
                             }
                         }
                     } catch (InterruptedException e) {
+                        //closeChannel(channelPublish);
                         break;
                     } catch (Exception e) {
                         Log.d("'", "Connection publishThread broken: " + e.getClass().getName());
                         try {
                             Thread.sleep(5000); //sleep and then try again
                         } catch (InterruptedException e1) {
+
                             break;
                         }
                     }
