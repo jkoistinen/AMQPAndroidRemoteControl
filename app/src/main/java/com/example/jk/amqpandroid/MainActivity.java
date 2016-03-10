@@ -11,6 +11,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.concurrent.BlockingDeque;
@@ -100,6 +101,21 @@ public class MainActivity extends SuperActivity {
         }
     }
 
+    private Connection getConnection(){
+
+        //This functions and data are in GlobalApp java, it has the same lifecycle as Activity but for the entire App
+        GlobalApp gApp = (GlobalApp)getApplicationContext();
+        Connection connection = gApp.connection;
+
+        return connection;
+    }
+
+    private Channel channel;
+    private void setChannel(Connection connection) throws IOException {
+        Channel channel = connection.createChannel();
+        this.channel = channel;
+    }
+
     private void subscribeRating(final Handler handler)
     {
         subscribeThread = new Thread(new Runnable() {
@@ -107,19 +123,10 @@ public class MainActivity extends SuperActivity {
             public void run() {
                 while(true) {
                     try {
-                        //This functions and data are in GlobalApp java, it has the same lifecycle as Activity but for the entire App
-                        GlobalApp gApp = (GlobalApp)getApplicationContext();
 
-                        Connection connection = gApp.connection;
+                        Connection connection = getConnection();
 
-                        if (connection.isOpen()){
-                            Log.d("'", "Connection open...");
-                        } else {
-                            Log.d("'", "Connecion closed...");
-                        }
-
-                        //Connection connection = factory.newConnection();
-                        Channel channel = connection.createChannel();
+                        setChannel(connection);
 
                         channel.basicQos(1);
                         AMQP.Queue.DeclareOk q = channel.queueDeclare();
@@ -143,18 +150,9 @@ public class MainActivity extends SuperActivity {
                             handler.sendMessage(msg);
                             boolean requeue = false;
                             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), requeue );
-                            Log.d("'", "Consumed message!");
-
-                            if(subscribeThread.isInterrupted()){
-                                Log.d("'", "Intermission");
-                            }
-
                         }
 
                     } catch (InterruptedException e) {
-
-                        Log.d("'", "Interrupt 2");
-
                         break;
                     } catch (Exception e1) {
                         Log.d("'", "Connection subscribeThread broken: " + e1.getClass().getName());
