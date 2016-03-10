@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="amqpuri">amqps://bghuujti:uW7LhX37CIBV3md1I655FBDomJMjsBvw@spotted-monkey.rmq.cloudamqp.com/bghuujti</string>
+    <string name="amqpuri">amqpss://bghuujti:uW7LhX37CIBV3md1I655FBDomJMjsBvw@spotted-monkey.rmq.cloudamqp.com/bghuujti</string>
 </resources>
