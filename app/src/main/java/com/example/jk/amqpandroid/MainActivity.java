@@ -80,6 +80,15 @@ public class MainActivity extends SuperActivity {
         subscribeThread.interrupt();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("'", "onPause called");
+
+        publishThread.interrupt();
+        subscribeThread.interrupt();
+    }
+
     private final BlockingDeque<Float> queueRating = new LinkedBlockingDeque();
     private void publishRatingMessage(Float message) {
         //Adds a message to internal blocking queue
@@ -135,8 +144,17 @@ public class MainActivity extends SuperActivity {
                             boolean requeue = false;
                             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), requeue );
                             Log.d("'", "Consumed message!");
+
+                            if(subscribeThread.isInterrupted()){
+                                Log.d("'", "Intermission");
+                            }
+
                         }
+
                     } catch (InterruptedException e) {
+
+                        Log.d("'", "Interrupt 2");
+
                         break;
                     } catch (Exception e1) {
                         Log.d("'", "Connection subscribeThread broken: " + e1.getClass().getName());

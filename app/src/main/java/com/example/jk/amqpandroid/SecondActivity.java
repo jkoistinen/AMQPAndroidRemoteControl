@@ -108,6 +108,13 @@ public class SecondActivity extends SuperActivity {
         subscribeThread.interrupt();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        publishThread.interrupt();
+        subscribeThread.interrupt();
+    }
+
     private final BlockingDeque<String> queue = new LinkedBlockingDeque<String>();
     private void publishMessage(String message) {
         //Adds a message to internal blocking queue

@@ -12,9 +12,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:layout_gravity="top">
+        android:layout_gravity="top"
+        android:fillViewport="false"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/textView"
