@@ -68,6 +68,26 @@ public class SecondActivity extends SuperActivity {
         subscribe(mHandler);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        //Save the users current chat window content
+        TextView tv = (TextView) findViewById(R.id.textView);
+        savedInstanceState.putString("chatwindowcontent", tv.getText().toString());
+
+        //Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        //Restore state members from saved instance
+        TextView tv = (TextView) findViewById(R.id.textView);
+        tv.setText(savedInstanceState.getString("chatwindowcontent"));
+    }
+
     private void setupPubButton() {
         Button button = (Button) findViewById(R.id.publish);
         button.setOnClickListener(new View.OnClickListener() {
