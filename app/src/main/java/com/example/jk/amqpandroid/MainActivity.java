@@ -114,11 +114,9 @@ public class MainActivity extends SuperActivity {
         return connection;
     }
 
-    public Channel channel;
-    private void setChannel(Connection connection) throws IOException {
-        Channel channel = connection.createChannel();
-        this.channel = channel;
-    }
+    //public Channel channel;
+    public Channel channelSubscribe;
+    public Channel channelPublish;
 
     private Channel getChannel(Connection connection) throws IOException {
         Channel channel = connection.createChannel();
@@ -142,14 +140,15 @@ public class MainActivity extends SuperActivity {
         subscribeThread = new Thread(new Runnable() {
             @Override
             public void run() {
+
                 while(true) {
                     try {
 
                         Connection connection = getConnection();
-                        Channel channelSubscribe = getChannel(connection);
+                        channelSubscribe = getChannel(connection);
 
                         channelSubscribe.basicQos(1);
-                        AMQP.Queue.DeclareOk q = channel.queueDeclare();
+                        AMQP.Queue.DeclareOk q = channelSubscribe.queueDeclare();
                         channelSubscribe.queueBind(q.getQueue(), "amq.fanout", "rating");
                         QueueingConsumer consumer = new QueueingConsumer(channelSubscribe);
                         boolean autoAck = false;
@@ -173,7 +172,7 @@ public class MainActivity extends SuperActivity {
                         }
 
                     } catch (InterruptedException e) {
-                        //closeChannel(channelSubscribe);
+                        closeChannel(channelSubscribe);
                         break;
                     } catch (Exception e1) {
                         Log.d("'", "Connection subscribeThread broken: " + e1.getClass().getName());
@@ -198,7 +197,7 @@ public class MainActivity extends SuperActivity {
                     try {
 
                         Connection connection = getConnection();
-                        Channel channelPublish = getChannel(connection);
+                        channelPublish = getChannel(connection);
 
                         channelPublish.confirmSelect();
 
@@ -220,7 +219,7 @@ public class MainActivity extends SuperActivity {
                             }
                         }
                     } catch (InterruptedException e) {
-                        //closeChannel(channelPublish);
+                        closeChannel(channelPublish);
                         break;
                     } catch (Exception e) {
                         Log.d("'", "Connection publishThread broken: " + e.getClass().getName());
