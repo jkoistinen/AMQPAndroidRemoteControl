@@ -120,6 +120,7 @@ public class MainActivity extends SuperActivity {
 
     private Channel getChannel(Connection connection) throws IOException {
         Channel channel = connection.createChannel();
+        Log.d("'", "Channel "+channel.getChannelNumber()+" opened");
         return channel;
     }
 
